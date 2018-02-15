@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <script>
+      function loadPlayers() {
+        let request = new XMLHttpRequest();
+        //AJAX example: Loading a local json file of basketball players and their teams to display in a table.
+        request.onreadystatechange = function() {
+          if (this.status == 200 && this.readyState == 4) {
+            let json = this.responseText;
+            loadTableWithPlayers(json);
+          }
+        }
+        request.open("GET", "players.json", true);
+        request.send();
+
+      }
+
+      function loadTableWithPlayers(players) {
+        let table = document.getElementById("playerTable");
+        for (let player in players) {
+          let newRow = table.insertRow(0);
+          let column1 = newRow.insertCell(0);
+
+          column1.innerHTML = "Hello World";
+        }
+      }
+
+      function newQuery() {
+
+      }
+    </script>
+  </head>
+
+
+  <body onload="loadPlayers();">
+    <table id="playerTable">
+
+    </table>
+  </body>
+</html>
