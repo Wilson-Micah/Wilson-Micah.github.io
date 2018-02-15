@@ -6,22 +6,45 @@
         //AJAX example: Loading a local json file of basketball players and their teams to display in a table.
         request.onreadystatechange = function() {
           if (this.status == 200 && this.readyState == 4) {
-            let json = this.responseText;
+            let json = JSON.parse(this.responseText);
             loadTableWithPlayers(json);
+            console.log(json);
           }
         }
-        request.open("GET", "players.json", true);
+        request.open("GET", "https://wilson-micah.github.io/cit261/players.json", true);
         request.send();
-
       }
 
       function loadTableWithPlayers(players) {
-        let table = document.getElementById("playerTable");
-        for (let player in players) {
-          let newRow = table.insertRow(0);
-          let column1 = newRow.insertCell(0);
 
-          column1.innerHTML = "Hello World";
+        //Sort players before displaying.
+        players = players.sort( function(player1, player2) {
+            return player2.id - player1.id;
+        });
+
+        let table = document.getElementById("playerTable");
+        for (var i = 0; i < players.length; i++) {
+          let newRow = table.insertRow(1);
+
+          let column1 = newRow.insertCell(0);
+          var image = document.createElement('img');
+          image.style.height = 40;
+          image.src = players[i].imageURL;
+          column1.appendChild(image);
+          column1.style.width = 60;
+
+          let column2 = newRow.insertCell(1);
+          column2.style.width = 200;
+          column2.innerHTML = players[i].firstName + " " + players[i].lastName;
+
+          let column3 = newRow.insertCell(2);
+          column3.style.width = 200;
+          column3.style.textAlign = "center";
+          column3.innerHTML = players[i].team.city + " " + players[i].team.name;
+
+          let column4 = newRow.insertCell(3);
+          column4.style.textAlign = "center";
+          column4.innerHTML = players[i].position;
         }
       }
 
@@ -33,8 +56,13 @@
 
 
   <body onload="loadPlayers();">
-    <table id="playerTable">
-
-    </table>
+    <div style="width=50%;">
+      <table id="playerTable" style="height=100%; width=100%;">
+        <th>Image</th>
+        <th>Name</th>
+        <th>Team</th>
+        <th>Position</th>
+      </table>
+    </div>
   </body>
 </html>
