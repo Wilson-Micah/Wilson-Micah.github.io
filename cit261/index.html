@@ -1,14 +1,17 @@
 <html>
   <head>
     <script>
+
+      var players = [];
+
       function loadPlayers() {
         let request = new XMLHttpRequest();
         //AJAX example: Loading a local json file of basketball players and their teams to display in a table.
         request.onreadystatechange = function() {
           if (this.status == 200 && this.readyState == 4) {
-            let json = JSON.parse(this.responseText);
-            loadTableWithPlayers(json);
-            console.log(json);
+            //JSON example: Parse the json response to get an array of players.
+            players = JSON.parse(this.responseText);
+            loadTableWithPlayers(players);
           }
         }
         request.open("GET", "https://wilson-micah.github.io/cit261/players.json", true);
@@ -18,13 +21,17 @@
       function loadTableWithPlayers(players) {
 
         //Sort players before displaying.
+        //Javascript objects, each player in the list is an object and I'm sorting it by its id.
         players = players.sort( function(player1, player2) {
             return player2.id - player1.id;
         });
 
-        let table = document.getElementById("playerTable");
+        let table = document.getElementById("tableBody");
+        table.innerHTML = "";
+        //Javascript Loops and conditionals example
+        //DOM manipulation: Adding new cells to a table.
         for (var i = 0; i < players.length; i++) {
-          let newRow = table.insertRow(1);
+          let newRow = table.insertRow(0);
 
           let column1 = newRow.insertCell(0);
           var image = document.createElement('img');
@@ -35,6 +42,7 @@
 
           let column2 = newRow.insertCell(1);
           column2.style.width = 200;
+          column2.style.textAlign = "center";
           column2.innerHTML = players[i].firstName + " " + players[i].lastName;
 
           let column3 = newRow.insertCell(2);
@@ -49,19 +57,36 @@
       }
 
       function newQuery() {
+        //Javascript Loops and conditionals example
+        let input = document.getElementById("searchInput");
+        let query = input.value.trim();
 
+        if (query.empty) {
+          loadTableWithPlayers(players);
+        } else {
+          let queriedPlayers = players.filter(player =>
+            player.firstName.toLowerCase().includes(query.toLowerCase()) || player.lastName.toLowerCase().includes(query.toLowerCase()) || player.team.name.toLowerCase().includes(query.toLowerCase())
+          );
+          loadTableWithPlayers(queriedPlayers);
+        }
       }
     </script>
   </head>
 
 
   <body onload="loadPlayers();">
-    <div style="width=50%;">
+    <div style="width:500px; margin:0 auto;">
+      <input id="searchInput" style="width:100%;" placeholder="Search for player" onkeyup="newQuery();" />
       <table id="playerTable" style="height=100%; width=100%;">
-        <th>Image</th>
-        <th>Name</th>
-        <th>Team</th>
-        <th>Position</th>
+        <thead>
+          <th>Image</th>
+          <th>Name</th>
+          <th>Team</th>
+          <th>Position</th>
+        </thead>
+        <tbody id="tableBody">
+
+        </tbody>
       </table>
     </div>
   </body>
