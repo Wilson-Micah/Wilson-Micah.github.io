@@ -5,6 +5,22 @@
       var players = [];
 
       function loadPlayers() {
+
+        //Will only load the JSON once and afterwards will use the localStorage API to load the players from there.
+        //This could be useful if it was making a network request instead of loading the player locally.
+        try {
+          let local = localStorage.getItem("players");
+          players = JSON.parse(local);
+        } catch (error) {
+          console.log(error);
+        }
+
+        if (players != null && players.length > 0) {
+          loadTableWithPlayers(players);
+          return
+        }
+        console.log("helloer");
+
         let request = new XMLHttpRequest();
         //AJAX example: Loading a local json file of basketball players and their teams to display in a table.
         request.onreadystatechange = function() {
@@ -12,6 +28,7 @@
             //JSON example: Parse the json response to get an array of players.
             players = JSON.parse(this.responseText);
             loadTableWithPlayers(players);
+            localStorage.setItem("players", this.responseText);
           }
         }
         request.open("GET", "https://wilson-micah.github.io/cit261/players.json", true);
@@ -70,13 +87,53 @@
           loadTableWithPlayers(queriedPlayers);
         }
       }
+
+      function showSearchHistory() {
+        // TODO - Load Search History from local storage.
+        let input = document.getElementById("searchInput");
+        // input.style.width = "80%";
+        // button.style.width = "19%";
+      }
+
     </script>
+
+    <style>
+      @keyframes hovered {
+        from {
+          color: white;
+        }
+        to {
+          color: #48A8E7;
+        }
+      }
+
+      /* CSS Transitions:  */
+      img {
+        -webkit-transition: 0.2s linear;
+        transition: 0.2s linear;
+      }
+
+      /* CSS Transforms: */
+      img:hover {
+        transform: scale(3.5);
+      }
+
+      /* CSS Animations: */
+      tr:hover {
+        animation-fill-mode: forwards;
+        animation-name: hovered;
+        animation-duration: 0.3s;
+        cursor: pointer;
+      }
+
+
+    </style>
   </head>
 
 
   <body onload="loadPlayers();">
     <div style="width:500px; margin:0 auto;">
-      <input id="searchInput" style="width:100%;" placeholder="Search for player" onkeyup="newQuery();" />
+      <input id="searchInput" style="width:100%;" placeholder="Search for player" onkeyup="newQuery();" onfocus="showSearchHistory();" />
       <table id="playerTable" style="height=100%; width=100%;">
         <thead>
           <th>Image</th>
