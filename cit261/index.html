@@ -19,7 +19,6 @@
           loadTableWithPlayers(players);
           return
         }
-        console.log("helloer");
 
         let request = new XMLHttpRequest();
         //AJAX example: Loading a local json file of basketball players and their teams to display in a table.
@@ -88,11 +87,21 @@
         }
       }
 
-      function showSearchHistory() {
-        // TODO - Load Search History from local storage.
+      function changeSeachBarCSS() {
+
+        //Manipulating CSS properties as well as triggering an animation.
         let input = document.getElementById("searchInput");
-        // input.style.width = "80%";
-        // button.style.width = "19%";
+        input.style.width = "100%";
+        input.style.height = "40px";
+        input.classList.add("searchSelected");
+      }
+
+      function undoSearchBarCSS() {
+
+        let input = document.getElementById("searchInput");
+        input.style.width = "100%";
+        input.style.height = "20px";
+        input.classList.remove("searchSelected");
       }
 
     </script>
@@ -104,6 +113,21 @@
         }
         to {
           color: #48A8E7;
+        }
+      }
+
+      @keyframes searchBar {
+        from {
+          background-color: white;
+          color: black;
+          border-radius: 0px;
+        }
+        to {
+          background-color: #48A8E7;
+          color: white;
+          border-radius: 16px;
+          padding: 20px;
+          font-size: 20px;
         }
       }
 
@@ -126,14 +150,29 @@
         cursor: pointer;
       }
 
+      input:focus::placeholder {
+        color: white;
+      }
 
+      .searchSelected {
+        animation-fill-mode: forwards;
+        animation-name: searchBar;
+        animation-duration: 0.3s;
+      }
     </style>
   </head>
 
-
+  <!-- Javascript Events. You can see I use on onload event as well as onfocus, onkeyup, and onfocusout.  -->
   <body onload="loadPlayers();">
     <div style="width:500px; margin:0 auto;">
-      <input id="searchInput" style="width:100%;" placeholder="Search for player" onkeyup="newQuery();" onfocus="showSearchHistory();" />
+
+      <h2 style="width:500px; text-align:center; padding: 10px;">NBA 2017-18 Season</h2>
+      <!-- HTML 5 video -->
+      <video width="500px" style="padding-bottom: 20px;" controls>
+        <source src="response.mp4" type="video/mp4">
+      </video>
+
+      <input id="searchInput" style="width:100%;" placeholder="Search for player" onkeyup="newQuery();" onfocus="changeSeachBarCSS();" onfocusout="undoSearchBarCSS();" />
       <table id="playerTable" style="height=100%; width=100%;">
         <thead>
           <th>Image</th>
