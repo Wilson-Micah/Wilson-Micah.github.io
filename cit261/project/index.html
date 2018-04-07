@@ -1,0 +1,457 @@
+<html>
+  <head>
+
+    <style>
+      body {
+        overflow: hidden;
+        margin: 0;
+        text-align: center;
+      }
+      .header {
+        position: sticky;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        background-color: #004597;
+        left: 0px;
+        top: 0;
+        right: 0;
+        height: 48px;
+        overflow: hidden;
+        background: linear-gradient(90deg, #26d4fe, #004697);
+        background-size: 200% 200%;
+        -webkit-animation: AnimationName 4s ease infinite;
+        animation: AnimationName 4s ease infinite;
+      }
+      .header > div {
+        align-self: center;
+        color: #FFFFFF;
+        margin: 10px;
+        font-size: 20px;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        background-color: white;
+      }
+      .container > div {
+        align-self: center;
+        max-width: 100%;
+        width: 500px;
+        text-align: center;
+      }
+      .jumbotron {
+        overflow-y: scroll;
+        height: 100%;
+        display: block;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      td:nth-child(1) {
+        height: 40px;
+        width: 50%;
+        padding-left: 20px;
+      }
+      td:nth-child(2) {
+        width: 16%;
+        text-align: center;
+      }
+      td:nth-child(3) {
+        text-align: left;
+        padding-left: 30px;
+      }
+
+      tr {
+        transition: transform .2s;
+      }
+
+      tbody tr:hover {
+        color: #004697;
+        cursor: pointer;
+        transform: scale(1.04);
+      }
+
+      tbody tr:nth-child(even) {
+        background-color: rgba(32, 32, 32, 0.02);
+      }
+      tbody td:nth-child(even) {
+        background-color: rgba(32, 32, 32, 0.02);
+      }
+      a:hover {
+        cursor: pointer;
+      }
+      .buttonContainer {
+        display: flex;
+        justify-content: space-around;
+      }
+      .buttonContainer > a {
+        align-self: center;
+        width: 200px;
+      }
+      .arrow {
+        transition: transform .2s;
+      }
+
+      .arrow:after {
+        filter: blur(5px);
+        opacity: .2;
+      }
+
+      .arrow:hover {
+        cursor: pointer;
+        transform: scale(1.2);
+      }
+
+      .arrow:hover:after {
+        bottom: -10px;
+      }
+
+      .tint-hidden {
+        position: absolute;
+        display: flex;
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0.3s, opacity 0.3s linear;
+        justify-content: space-around;
+        align-items: center;
+        background: rgba(0, 0, 0, .4);;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+      }
+
+      .tint {
+        position: absolute;
+        display: flex;
+        opacity: 1;
+        transition: visibility 0.3s, opacity 0.3s linear;
+        justify-content: space-around;
+        align-items: center;
+        background: rgba(0, 0, 0, .4);;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+      }
+
+      .innerModal {
+        background: white;
+        align-self: center;
+        max-width: 100%;
+        width: 300px;
+        height: 284px;
+        border-radius: 8px;
+        box-shadow: 0 0 1px rgba(0, 0, 0, .3);
+        transition: transform 0.5s ease-out;
+        transform: translateY(0px) scale(1);
+      }
+
+      .innerModal-hidden {
+        background: white;
+        align-self: center;
+        max-width: 100%;
+        width: 300px;
+        height: 284px;
+        border-radius: 8px;
+        box-shadow: 0 0 1px rgba(0, 0, 0, .3);
+        transition: transform 0.5s ease-in;
+        transform: translateY(-1000px) scale(0.8);
+      }
+
+      .playerDetails {
+        display: flex;
+        justify-content: flex-start;
+        width: 100%;
+      }
+
+      .playerDetails > .playerInfo {
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        margin-left: 10px;
+      }
+
+      .playerInfo > p {
+        margin: 0px;
+        height: 16px;
+        align-self: flex-start;
+      }
+
+      #playerImage {
+        margin-left: 10px;
+        margin-top: 10px;
+      }
+
+      p {
+        width: 100%;
+        text-align: left;
+        margin-left: 10px;
+      }
+
+      .loader {
+        position: inherit;
+        background-color: rgba(1, 1, 1, .1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+      }
+      .spinner {
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        margin: 100px auto;
+      }
+
+      .double-bounce1, .double-bounce2 {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background-color: #257CF9;
+        opacity: 0.6;
+        position: absolute;
+        top: 0;
+        left: 0;
+        -webkit-animation: sk-bounce 2.4s infinite ease-in-out;
+        animation: sk-bounce 2.4s infinite ease-in-out;
+      }
+
+      .double-bounce2 {
+        -webkit-animation-delay: -1.2s;
+        animation-delay: -1.2s;
+      }
+
+      @-webkit-keyframes sk-bounce {
+        0%, 100% { -webkit-transform: scale(0.0) }
+        50% { -webkit-transform: scale(1.0) }
+      }
+
+      @keyframes sk-bounce {
+        0%, 100% {
+          transform: scale(0.0);
+          -webkit-transform: scale(0.0);
+        } 50% {
+          transform: scale(1.0);
+          -webkit-transform: scale(1.0);
+        }
+      }
+
+      @-webkit-keyframes AnimationName {
+          0%{background-position:0% 50%}
+          50%{background-position:100% 50%}
+          100%{background-position:0% 50%}
+      }
+
+      @keyframes AnimationName {
+          0%{background-position:0% 50%}
+          50%{background-position:100% 50%}
+          100%{background-position:0% 50%}
+      }
+    </style>
+    <script>
+      let currentDay
+      function loaded() {
+        this.currentDay = new Date()
+        goBackDay()
+      }
+
+      function populateGamesFrom(games) {
+        //Clear Table
+        let table = document.getElementById("tableBody")
+        table.innerHTML = ""
+
+        for (var i = 0; i < games.length; i++) {
+          let newRow = table.insertRow(0);
+
+          let column1 = newRow.insertCell(0);
+          column1.innerHTML = games[i].awayTeam.name
+
+          let column2 = newRow.insertCell(1);
+          column2.innerHTML = games[i].date + " " + games[i].time
+
+          let column3 = newRow.insertCell(2);
+          column3.innerHTML = games[i].homeTeam.name
+        }
+      }
+      //TODO: Put in a calendar picker.
+      function fetchLeadersFor(date) {
+        var loader = document.getElementById("mainLoader")
+        loader.style.display = 'flex'
+        let route = 'https://one-pick.herokuapp.com/api/v1/stats?date=' + date
+        let request = new XMLHttpRequest()
+        request.onreadystatechange = function() {
+          if (this.status == 200 && this.readyState == 4) {
+            loader.style.display = 'none'
+            let searchResult = JSON.parse(this.responseText)
+            console.log(searchResult.reverse())
+            populateLeaderboardFrom(searchResult)
+          } else if (this.status == 404) {
+            loader.style.display = 'none'
+            console.log("No data found")
+            populateLeaderboardFrom([])
+          }
+        }
+        request.open('GET', route, true)
+        request.send()
+      }
+
+      function goBackDay() {
+        this.currentDay.setDate(this.currentDay.getDate()-1)
+        let formatted = formatDate(this.currentDay)
+        let header = document.getElementById("headerLabel")
+        header.innerHTML = "Leaderboard for " + formatted
+        fetchLeadersFor(formatted)
+      }
+
+      function goFowardDay() {
+        this.currentDay.setDate(this.currentDay.getDate()+1)
+        let formatted = formatDate(this.currentDay)
+        let header = document.getElementById("headerLabel")
+        header.innerHTML = "Leaderboard for " + formatted
+        fetchLeadersFor(formatted)
+      }
+
+      function formatDate(date) {
+
+        console.log(date)
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+
+        return [year, month, day].join('-');
+      }
+
+      function populateLeaderboardFrom(players) {
+        //Clear Table
+        let table = document.getElementById("tableBody")
+        table.innerHTML = ""
+
+        for (var i = 0; i < players.length; i++) {
+          let newRow = table.insertRow(0);
+          let self = this
+          newRow.player = players[i]
+          newRow.onclick = function(element) {
+            showModal(this.player)
+          }
+
+          let column1 = newRow.insertCell(0);
+          column1.innerHTML = players[i].player.firstName + " " + players[i].player.lastName
+
+          let column2 = newRow.insertCell(1);
+          column2.innerHTML = players[i].score
+
+          let column3 = newRow.insertCell(2);
+          column3.innerHTML = players[i].player.team.name
+        }
+      }
+
+      function closeModal() {
+        let tint = document.getElementById("playerModal")
+        let modal = document.getElementById("innerModal")
+        tint.className = "tint-hidden"
+        modal.className = "innerModal-hidden"
+      }
+
+      function showModal(player) {
+        console.log(player)
+        let tint = document.getElementById("playerModal")
+        let modal = document.getElementById("innerModal")
+        tint.className = "tint"
+        modal.className = "innerModal"
+
+        let image = document.getElementById("playerImage")
+        image.src = player.player.imageURL
+
+        let name = document.getElementById("playerName")
+        name.innerHTML = player.player.firstName + " " + player.player.lastName
+
+        let position = document.getElementById("playerPosition")
+        position.innerHTML = "Position: " + player.player.position
+
+        let number = document.getElementById("playerNumber")
+        number.innerHTML = "Number: " + player.player.jerseyNumber
+
+        let score = document.getElementById("playerScore")
+        score.innerHTML = "Score: " + player.score
+
+        let points = document.getElementById("playerPoints")
+        points.innerHTML = "Points: " + player.points
+
+        let assists = document.getElementById("playerAssists")
+        assists.innerHTML = "Assists: " + player.assists
+
+        let rebounds = document.getElementById("playerRebounds")
+        rebounds.innerHTML = "Rebounds: " + player.rebounds
+
+        let turnovers = document.getElementById("playerTurnovers")
+        turnovers.innerHTML = "Turnovers: " + player.turnovers
+
+        let rookie = document.getElementById("playerRookie")
+        rookie.innerHTML = "Rookie (x2): " + (player.player.rookie ? "Yes" : "No")
+      }
+    </script>
+  </head>
+  <body onload="loaded();">
+
+    <div class="header">
+      <div style="width: 30%;">CIT 261</div>
+      <div style="width: 40%;">Pick One Challenge</div>
+      <div style="width: 30%;"></div>
+    </div>
+
+    <div class="container">
+      <div class="jumbotron">
+        <div class="buttonContainer">
+          <a class="arrow" onclick="goBackDay()"><img src="backIcon.png"/></a>
+          <h3 id="headerLabel">Leaderboard for 04/05/2018</h3>
+          <a class="arrow" onclick="goFowardDay()"><img src="nextIcon.png"/></a>
+        </div>
+        <div class="loader" id="mainLoader">
+          <div class="spinner">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
+          </div>
+        </div>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <td>Name</td>
+              <td>Points</td>
+              <td>Team</td>
+            </tr>
+          </thead>
+          <tbody id="tableBody"/>
+        </table>
+        <div class="tint-hidden" id="playerModal" onclick="closeModal()">
+          <div class="innerModal-hidden" id="innerModal">
+            <div class="playerDetails">
+              <img id="playerImage" style="max-width: 60px; max-height: 60px;"/>
+              <div class="playerInfo">
+                <p id="playerName">Full Name</p>
+                <p id="playerPosition">Position</p>
+                <p id="playerNumber">Number</p>
+              </div>
+            </div>
+            <p id="playerScore">Score: </p>
+            <p id="playerPoints">Points: </p>
+            <p id="playerAssists">Assists: </p>
+            <p id="playerRebounds">Rebounds: </p>
+            <p id="playerTurnovers">Turnovers: </p>
+            <p id="playerRookie">Rookie (x2): </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
