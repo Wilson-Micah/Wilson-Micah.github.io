@@ -6,6 +6,7 @@
         overflow: hidden;
         margin: 0;
         text-align: center;
+        font-family: "Courier"
       }
       .header {
         position: sticky;
@@ -284,7 +285,7 @@
       function fetchLeadersFor(date) {
         var loader = document.getElementById("mainLoader")
         loader.style.display = 'flex'
-        let route = 'https://one-pick.herokuapp.com/api/v1/stats?date=' + date
+        let route = 'https://sheltered-coast-51926.herokuapp.com/project/leaderboard/players?date=' + date
         let request = new XMLHttpRequest()
         request.onreadystatechange = function() {
           if (this.status == 200 && this.readyState == 4) {
